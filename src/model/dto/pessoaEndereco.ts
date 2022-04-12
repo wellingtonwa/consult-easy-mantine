@@ -1,10 +1,11 @@
 import {Pessoa} from "./pessoa";
+import {Cidade} from "./cidade";
 
 export interface PessoaEndereco {
   id?: number;
   descricao?: string;
   pessoa?: Pessoa;
-  cidade?: string;
+  cidade?: Cidade;
   logradouro?: string;
   numero?: string;
   complemento?: string;

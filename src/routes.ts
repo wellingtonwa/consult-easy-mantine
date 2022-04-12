@@ -19,15 +19,15 @@ const routes: RouteProps[] = [
     layout: '/admin'
   },
   {
-    path: '/admin/paciente',
-    name: 'Pacientes',
-    component: PessoaSearchView,
-    layout: '/admin'
-  },
-  {
     path: '/admin/paciente/edit',
     name: 'Editar Paciente',
     component: PessoaEditView,
+    layout: '/admin'
+  },
+  {
+    path: '/admin/paciente',
+    name: 'Pacientes',
+    component: PessoaSearchView,
     layout: '/admin'
   },
   {

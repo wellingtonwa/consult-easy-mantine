@@ -3,8 +3,8 @@ import {Button, Center, Group, Paper, TextInput, Title} from '@mantine/core';
 import {useForm} from "@mantine/form";
 import {showNotification} from "@mantine/notifications";
 import {doLogin} from "../api/login.service";
-import {Navigate} from "react-router-dom";
 import {setToken} from "../util/auth.util";
+import {Redirect} from "react-router";
 
 const Login = () => {
 
@@ -30,7 +30,7 @@ const Login = () => {
   }
 
   return <Paper sx={{maxWidth: 350}} shadow="lg" mx="auto" p={10}>
-    {loginSuccess && <Navigate to="/admin/home" replace={true}/> }
+    {loginSuccess && <Redirect to="/admin/home"/> }
       <Center>
         <Title order={3}>Login</Title>
       </Center>
