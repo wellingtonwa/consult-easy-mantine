@@ -1,5 +1,4 @@
 import {Home, User} from "tabler-icons-react";
-import PessoaSearchView from "./pages/pessoa/PessoaSearchView";
 
 const menu = [
   {

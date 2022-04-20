@@ -3,7 +3,7 @@ import {ActionIcon, Container, Group, Paper, Space, Table} from "@mantine/core"
 import {findAllPessoas} from "../../api/pessoa.service";
 import {Pencil, Plus, Trash} from "tabler-icons-react";
 import {Pessoa} from "../../model/dto/pessoa";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 const PessoaSearchView = (props: any) => {
   const [pessoas, setPessoas] = useState([] as Pessoa[]);
