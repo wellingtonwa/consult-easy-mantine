@@ -7,6 +7,10 @@ export const findAllPessoas = () => {
   return api.get('');
 };
 
-export const updatePessoa = (pessoa: Pessoa) => {
+export const savePessoa = (pessoa: Pessoa) => {
   return api.post('', pessoa);
+};
+
+export const updatePessoa = (pessoa: Pessoa) => {
+  return api.put('', pessoa);
 };

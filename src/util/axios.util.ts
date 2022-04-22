@@ -5,7 +5,7 @@ const baseURL = "http://localhost:8080/";
 
 const api = axios.create({
   baseURL
-})
+});
 
 
 export const apiWithToken = (path: string) => {

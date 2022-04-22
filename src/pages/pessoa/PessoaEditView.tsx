@@ -1,14 +1,16 @@
 import React from "react";
-import {Button, Container, Paper, Space, Table, TextInput, Title} from "@mantine/core";
+import {ActionIcon, Button, Container, Group, Paper, Space, Table, TextInput, Title} from "@mantine/core";
 import {useHistory} from "react-router";
 import {Pessoa} from "../../model/dto/pessoa";
 import {useForm} from "@mantine/form";
 import {DatePicker} from "@mantine/dates";
 import 'dayjs/locale/pt-br';
 import dayjs from "dayjs";
-import {DeviceFloppy, Disc, X} from "tabler-icons-react";
-import {updatePessoa} from "../../api/pessoa.service";
+import {DeviceFloppy, Plus, X} from "tabler-icons-react";
+import {savePessoa, updatePessoa} from "../../api/pessoa.service";
 import {showNotification} from "@mantine/notifications";
+import DetailManager from "../../component/DetailManager/DetailManager";
+import PessoaContatoEditView from "./PessoaContatoEditView";
 
 type HistoryState = { pessoa: Pessoa };
 
@@ -18,7 +20,13 @@ const PessoaEditView = (props: any) => {
     const form = useForm({initialValues: paciente});
 
     const handleSubmit = (values: Pessoa) => {
-        updatePessoa(values).then(result => {
+        let saveUpdatePromisse;
+        if (values.id) {
+            saveUpdatePromisse = updatePessoa(values);
+        } else {
+            saveUpdatePromisse = savePessoa(values);
+        }
+        saveUpdatePromisse.then(result => {
             showNotification({
                                  message: 'Paciente salvo com sucesso',
                                  color: 'blue'
@@ -29,14 +37,6 @@ const PessoaEditView = (props: any) => {
         })
     };
 
-    const getContatoRows = () => {
-        return form.values.contatos?.map((contato, key) => <tr key={key}>
-            <td>{contato.id}</td>
-            <td>{contato.tipoContato}</td>
-            <td>{contato.contato}</td>
-        </tr>)
-    };
-
     const getEnderecosRows = () => {
         return form.values.enderecos?.map((endereco) => <tr key={endereco.id}>
             <td>{endereco.id}</td>
@@ -45,6 +45,21 @@ const PessoaEditView = (props: any) => {
         </tr>)
     };
 
+    const contatoColumns: any = [
+        {
+            checkboxSelection: () => true,
+        },
+        {
+            field: 'id',
+            headerName: 'ID'
+        }, {
+            field: 'tipoContato',
+            headerName: "Tipo de Contato"
+        },
+        {
+            field: 'contato',
+            headerName: 'Contato'
+        }];
     return <Container size="xl">
         <Paper p={"md"}>
             <Title order={1}>Editar Paciente</Title>
@@ -53,31 +68,32 @@ const PessoaEditView = (props: any) => {
             <form onSubmit={form.onSubmit(handleSubmit)}>
                 <TextInput placeholder="nome" label="Nome"{...form.getInputProps('nome')}/>
 
-                <DatePicker label="Data de Nascimento" locale="pt-br" inputFormat="DD/MM/YYYY" value={dayjs(form.values.dataNascimento).toDate()}
-                            onChange={value => form.setFieldValue("dataNascimento", dayjs(value).toString())}/>
+                <DatePicker label="Data de Nascimento" locale="pt-br" inputFormat="DD/MM/YYYY"
+                            value={dayjs(form.values.dataNascimento).toDate()}
+                            onChange={value => form.setFieldValue("dataNascimento", dayjs(value).format('YYYY-MM-DD').toString())}/>
                 <TextInput placeholder="Escola" label="Escola"{...form.getInputProps('escola')}/>
 
-                <Title order={3}>Contatos</Title>
-                <Table>
-                    <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Tipo</td>
-                        <td>Contato</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {getContatoRows()}
-                    </tbody>
-                </Table>
+                <Space h={10}/>
+                <DetailManager
+                    title="Contatos"
+                    columns={contatoColumns}
+                    keyField='id'
+                    detailView={PessoaContatoEditView}
+                    propName="contatos"
+                    formProps={form}
+                />
 
-                <Title order={3}>Endereços</Title>
+                <Space h={10}/>
+                <Group direction="row">
+                    <Title order={3}>Endereços</Title>
+                    <ActionIcon color="green" variant="filled"><Plus/></ActionIcon>
+                </Group>
                 <Table>
                     <thead>
                     <tr>
-                        <td>ID</td>
-                        <td>Tipo</td>
-                        <td>Contato</td>
+                        <th>ID</th>
+                        <th>Cidade</th>
+                        <th>Logradouro</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -86,11 +102,10 @@ const PessoaEditView = (props: any) => {
                 </Table>
 
                 <Button leftIcon={<DeviceFloppy/>} color={"green"} type="submit">Salvar</Button>
-                <Button leftIcon={<X/>} color={"red"} onClick={()=> history.goBack()}>Cancelar</Button>
+                <Button leftIcon={<X/>} color={"red"} onClick={() => history.goBack()}>Cancelar</Button>
             </form>
         </Paper>
     </Container>
-
-}
+};
 
 export default PessoaEditView;

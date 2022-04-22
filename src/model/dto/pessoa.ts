@@ -1,8 +1,8 @@
 import {PessoaEndereco} from "./pessoaEndereco";
 import {PessoaContato} from "./pessoaContato";
+import BasicDTO from "./basicDTO";
 
-
-export interface Pessoa {
+export interface Pessoa extends BasicDTO{
   nome?: number;
   enderecos?: PessoaEndereco[];
   contatos?: PessoaContato[];
