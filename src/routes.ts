@@ -15,7 +15,7 @@ const routes: RouteProps[] = [
   {
     path: '/admin/home',
     name: 'Dashboard',
-    component: Home,
+    component: Home as any,
     layout: '/admin'
   },
   {

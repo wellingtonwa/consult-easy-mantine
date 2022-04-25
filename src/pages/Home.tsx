@@ -3,7 +3,7 @@ import { Container } from "@mantine/core";
 import {findAllPessoas} from "../api/pessoa.service";
 
 
-const Home = () => {
+const Home = (props: any) => {
 
   useEffect(() => {
     callFindPessoas();

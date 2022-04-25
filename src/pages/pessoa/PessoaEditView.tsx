@@ -1,16 +1,17 @@
 import React from "react";
-import {ActionIcon, Button, Container, Group, Paper, Space, Table, TextInput, Title} from "@mantine/core";
+import {Button, Container, Paper, Space, TextInput, Title} from "@mantine/core";
 import {useHistory} from "react-router";
 import {Pessoa} from "../../model/dto/pessoa";
 import {useForm} from "@mantine/form";
 import {DatePicker} from "@mantine/dates";
 import 'dayjs/locale/pt-br';
 import dayjs from "dayjs";
-import {DeviceFloppy, Plus, X} from "tabler-icons-react";
+import {DeviceFloppy, X} from "tabler-icons-react";
 import {savePessoa, updatePessoa} from "../../api/pessoa.service";
 import {showNotification} from "@mantine/notifications";
 import DetailManager from "../../component/DetailManager/DetailManager";
 import PessoaContatoEditView from "./PessoaContatoEditView";
+import PessoaEnderecoEditView from "./PessoaEnderecoEditView";
 
 type HistoryState = { pessoa: Pessoa };
 
@@ -37,18 +38,7 @@ const PessoaEditView = (props: any) => {
         })
     };
 
-    const getEnderecosRows = () => {
-        return form.values.enderecos?.map((endereco) => <tr key={endereco.id}>
-            <td>{endereco.id}</td>
-            <td>{endereco.cidade?.nome}</td>
-            <td>{endereco.logradouro}</td>
-        </tr>)
-    };
-
     const contatoColumns: any = [
-        {
-            checkboxSelection: () => true,
-        },
         {
             field: 'id',
             headerName: 'ID'
@@ -60,6 +50,33 @@ const PessoaEditView = (props: any) => {
             field: 'contato',
             headerName: 'Contato'
         }];
+
+    const enderecoColumns: any = [
+        {
+            field: 'id',
+            headerName: 'ID'
+        },
+        {
+            field: 'logradouro',
+            headerName: 'Logradouro'
+        },
+        {
+            field: 'numero',
+            headerName: 'Número'
+        },
+        {
+            field: 'complemento',
+            headerName: 'Complemento'
+        },
+        {
+            field: 'bairro',
+            headerName: 'Bairro'
+        },
+        {
+            field: 'cidade.nome',
+            headerName: "Cidade"
+        }];
+
     return <Container size="xl">
         <Paper p={"md"}>
             <Title order={1}>Editar Paciente</Title>
@@ -84,22 +101,14 @@ const PessoaEditView = (props: any) => {
                 />
 
                 <Space h={10}/>
-                <Group direction="row">
-                    <Title order={3}>Endereços</Title>
-                    <ActionIcon color="green" variant="filled"><Plus/></ActionIcon>
-                </Group>
-                <Table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Cidade</th>
-                        <th>Logradouro</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {getEnderecosRows()}
-                    </tbody>
-                </Table>
+                <DetailManager
+                    title="Endereços"
+                    columns={enderecoColumns}
+                    keyField='id'
+                    detailView={PessoaEnderecoEditView}
+                    propName="enderecos"
+                    formProps={form}
+                />
 
                 <Button leftIcon={<DeviceFloppy/>} color={"green"} type="submit">Salvar</Button>
                 <Button leftIcon={<X/>} color={"red"} onClick={() => history.goBack()}>Cancelar</Button>
