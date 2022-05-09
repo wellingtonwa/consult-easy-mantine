@@ -3,7 +3,7 @@ import {PessoaContato} from "./pessoaContato";
 import BasicDTO from "./basicDTO";
 
 export interface Pessoa extends BasicDTO{
-  nome?: number;
+  nome?: string;
   enderecos?: PessoaEndereco[];
   contatos?: PessoaContato[];
   dataNascimento?: string;

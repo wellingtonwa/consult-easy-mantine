@@ -34,13 +34,22 @@ const App = (props: any) => {
         });
     }
 
+    const componentsSize = 'md';
+
     return (
         <Provider store={store}>
             <MantineProvider
                 theme={{
                     fontFamily: 'Open Sans, sans serif',
                     spacing: {xs: 15, sm: 20, md: 25, lg: 30, xl: 40}
-                }}>
+                }}
+                defaultProps={{
+                    Button: {size: componentsSize},
+                    TextInput: { size: componentsSize },
+                    Select: { size: componentsSize },
+                    DatePicker: { size: componentsSize }
+                }}
+            >
                 <BrowserRouter>
                     <ModalsProvider>
                         <NotificationsProvider position="top-right">

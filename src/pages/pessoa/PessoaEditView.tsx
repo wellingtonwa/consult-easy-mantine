@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Container, Group, Paper, Space, TextInput, Title} from "@mantine/core";
 import {useHistory} from "react-router";
 import {Pessoa} from "../../model/dto/pessoa";
-import {useForm} from "@mantine/form";
+import {useForm, yupResolver} from "@mantine/form";
 import {DatePicker} from "@mantine/dates";
 import 'dayjs/locale/pt-br';
 import dayjs from "dayjs";
@@ -14,30 +14,41 @@ import PessoaContatoEditView from "./PessoaContatoEditView";
 import PessoaEnderecoEditView from "./PessoaEnderecoEditView";
 import {ValueGetterParams} from "ag-grid-community/dist/lib/entities/colDef";
 import {TIPO_CONTATO_VALUES} from "../../model/dto/enum/tipoContratoEnum";
+import * as Yup from 'yup';
 
 type HistoryState = { pessoa: Pessoa };
 
 const PessoaEditView = (props: any) => {
   const history = useHistory<HistoryState>();
   const paciente = history.location.state.pessoa || {enderecos: [], contatos: []};
-  const form = useForm({initialValues: paciente});
+  const schema = Yup.object().shape({
+    nome: Yup.string().min(2, 'O Nome deve ter no mínimo 2 caracteres.')
+  });
+
+
+  const form = useForm<Pessoa>({
+    initialValues: paciente,
+    schema: yupResolver(schema),
+  });
 
   const handleSubmit = (values: Pessoa) => {
-    let saveUpdatePromisse;
-    if (values.id) {
-      saveUpdatePromisse = updatePessoa(values);
-    } else {
-      saveUpdatePromisse = savePessoa(values);
+    if (!form.validate().hasErrors) {
+      let saveUpdatePromisse;
+      if (values.id) {
+        saveUpdatePromisse = updatePessoa(values);
+      } else {
+        saveUpdatePromisse = savePessoa(values);
+      }
+      saveUpdatePromisse.then(result => {
+        showNotification({
+          message: 'Paciente salvo com sucesso',
+          color: 'blue'
+        });
+        history.goBack();
+      }).catch(reason => {
+        console.log(reason);
+      })
     }
-    saveUpdatePromisse.then(result => {
-      showNotification({
-        message: 'Paciente salvo com sucesso',
-        color: 'blue'
-      });
-      history.goBack();
-    }).catch(reason => {
-      console.log(reason);
-    })
   };
 
   const contatoColumns: any = [
@@ -48,7 +59,7 @@ const PessoaEditView = (props: any) => {
       field: 'tipoContato',
       headerName: "Tipo de Contato",
       valueGetter: (param: ValueGetterParams) => {
-        const result = TIPO_CONTATO_VALUES.find(it => it.value ===param.data.tipoContato);
+        const result = TIPO_CONTATO_VALUES.find(it => it.value === param.data.tipoContato);
         return result ? result.label : "";
       }
     },
@@ -118,8 +129,8 @@ const PessoaEditView = (props: any) => {
 
         <Space h={15}/>
         <Group>
-          <Button leftIcon={<DeviceFloppy/>} color={"green"} type="submit">Salvar</Button>
-          <Button leftIcon={<X/>} color={"red"} onClick={() => history.goBack()}>Cancelar</Button>
+          <Button leftIcon={<DeviceFloppy/>} color={"green"} type="submit" size="md">Salvar</Button>
+          <Button leftIcon={<X/>} color={"red"} onClick={() => history.goBack()} size="md">Cancelar</Button>
         </Group>
       </form>
     </Paper>
