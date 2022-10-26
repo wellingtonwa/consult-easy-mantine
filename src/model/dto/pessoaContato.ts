@@ -3,6 +3,7 @@ export interface PessoaContato {
   pessoa?: string;
   descricao?: string;
   codigoArea?: string;
-  contato?: string;
+  email?: string;
+  telefone?: string;
   tipoContato?: string;
 }

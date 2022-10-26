@@ -8,17 +8,14 @@ import * as Yup from "yup";
 
 const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
 
-  const schemaValidationEmail = Yup.object().  shape({
-    contato: Yup.string().email("Email incorreto")
-  })
-
-  const schemaValidationContato = Yup.object().  shape({
-    contato: Yup.string().matches(/^\(\d{2}\) \d{5}-\d{4}$/)
+  const schemaValidation = Yup.object().  shape({
+    email: Yup.string().email('Email incorreto').when('tipoContato', { is: 'EMAIL', then: Yup.string().required('Preencha o e-mail') }),
+    telefone: Yup.string().matches(/^\(\d{2}\) \d{5}-\d{4}$/, 'Telefone Inválido').when('tipoContato', {is: 'TELEFONE', then: Yup.string().required('Preencha o número de contato')}),
   })
 
   const form = useForm<PessoaContato>({
     initialValues: props.selectedItem,
-    validate: yupResolver(schemaValidationEmail),
+    validate: yupResolver(schemaValidation),
   });
 
   const vai = () => {
@@ -30,8 +27,8 @@ const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
     <form>
       <Select label="Tipo Contato" {...form.getInputProps('tipoContato')} data={TIPO_CONTATO_VALUES}/>
       <Space h={10}/>
-      {props.selectedItem && props.selectedItem.tipoContato === EMAIL.value && <TextInput placeholder="Informe o e-mail" type="email" label="e-mail" {...form.getInputProps('contato')}/>}
-      {props.selectedItem && props.selectedItem.tipoContato !== EMAIL.value && <InputMasked field={'contato'} form={form} mask={'(99) 99999-9999'}/>}
+      {props.selectedItem && props.selectedItem.tipoContato === EMAIL.value && <TextInput placeholder="Informe o e-mail" type="email" label="e-mail" {...form.getInputProps('email')}/>}
+      {props.selectedItem && props.selectedItem.tipoContato !== EMAIL.value && <InputMasked field={'telefone'} form={form} mask={'(99) 99999-9999'}/>}
       <Space h={10}/>
       <Group>
         <Button onClick={vai}>Salvar</Button>

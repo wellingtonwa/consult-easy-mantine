@@ -15,6 +15,7 @@ import PessoaEnderecoEditView from "./PessoaEnderecoEditView";
 import {ValueGetterParams} from "ag-grid-community/dist/lib/entities/colDef";
 import {TIPO_CONTATO_VALUES} from "../../model/dto/enum/tipoContratoEnum";
 import * as Yup from 'yup';
+import {EMAIL} from "../../model/dto/TipoContatoEnum";
 
 type HistoryState = { pessoa: Pessoa };
 
@@ -65,7 +66,16 @@ const PessoaEditView = (props: any) => {
       }
     },
     {
-      field: 'contato',
+      valueGetter: (params: any) => {
+        console.log(params.getValue('email'), params.getValue('telefone'), params.data);
+        let result = 'fail';
+        if (params.data.tipoContato === EMAIL.value) {
+          result = params.data.email;
+        } else {
+          result = params.data.telefone;
+        }
+        return result;
+      },
       headerName: 'Contato'
     }];
 
