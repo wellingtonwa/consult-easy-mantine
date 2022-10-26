@@ -50,15 +50,17 @@ const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
     }
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
+    console.log('asdsd');
     if (!form.validate().hasErrors) {
+      let data = form.values;
       const dados = {...data, ...{cidade: {...formCidade.values, ...{estado: formEstado.values}}}}
       props.handleSubmit(dados);
     }
   }
 
   return <>
-    <form onSubmit={form.onSubmit(onSubmit)}>
+    <form>
       <TextInput label="Descrição" {...form.getInputProps('descricao')}/>
         <Space h={10}/>
         <Input.Wrapper label="CEP" error={form.errors.cep}>
@@ -78,7 +80,7 @@ const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
       <TextInput label="Estado" {...formEstado.getInputProps('nome')} disabled/>
       <Space h={10}/>
       <Group>
-        <Button type="submit" size="md">Salvar</Button>
+        <Button onClick={() =>  onSubmit()} size="md">Salvar</Button>
         <Button onClick={props.handleCancel} size="md">Cancelar</Button>
       </Group>
     </form>

@@ -19,8 +19,9 @@ const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
   });
 
   const vai = () => {
-    console.log(form.validate());
-    props.handleSubmit(form.values);
+    if (!form.validate().hasErrors) {
+      props.handleSubmit(form.values);
+    }
   }
 
   return (<>

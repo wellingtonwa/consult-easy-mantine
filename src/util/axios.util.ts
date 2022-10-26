@@ -20,6 +20,16 @@ apiWithToken.interceptors.request.use(config => {
   return config;
 });
 
+apiWithToken.interceptors.response.use(response => {
+  return response
+}, error => {
+  if (error.response.status === 401) {
+    sessionStorage.removeItem(jhiAuthenticationToken);
+    Promise.reject(error);
+    (window as Window).location = '/';
+  }
+})
+
 export default api;
 export {apiWithToken};
 
