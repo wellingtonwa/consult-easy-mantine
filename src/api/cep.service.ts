@@ -1,7 +1,7 @@
 import {apiWithToken} from "../util/axios.util";
 
-const api = apiWithToken("/pesquisa-cep");
+const api = apiWithToken;
 
 export const consultarCep = (cep: String) => {
-  return api.get(`/${cep}`);
+  return api.get(`/pesquisa-cep/${cep}`);
 }

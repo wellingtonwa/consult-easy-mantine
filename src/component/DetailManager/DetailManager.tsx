@@ -147,7 +147,7 @@ const DetailManager = (props: DetailManagerProps) => {
 
         <Group position="apart">
             <Title order={3}>{props.title}</Title>
-            <Group direction="row">
+            <Group>
                 <ActionIcon size="lg" onClick={openInsertDialog} variant="filled" color="green">
                     <Plus/>
                 </ActionIcon>

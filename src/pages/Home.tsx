@@ -10,7 +10,7 @@ const Home = (props: any) => {
   },[]);
 
   const callFindPessoas = () => {
-    findAllPessoas().then(response => {
+    findAllPessoas().then((response:any) => {
       console.log(response.data);
     });
   }

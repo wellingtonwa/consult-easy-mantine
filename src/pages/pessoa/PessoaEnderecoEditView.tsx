@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Group, Input, InputWrapper, Space, TextInput} from "@mantine/core";
+import {Button, Group, Input, Space, TextInput} from "@mantine/core";
 import {useForm, yupResolver} from "@mantine/form";
 import {PessoaEndereco} from "../../model/dto/pessoaEndereco";
 import ReactInputMask from "react-input-mask";
@@ -17,7 +17,7 @@ const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
 
   const form = useForm<PessoaEndereco>({
     initialValues: props.selectedItem,
-    schema: yupResolver(schema)
+    validate: yupResolver(schema)
   });
   const formCidade = useForm<Cidade>({
     initialValues: form.values.cidade || {nome: ''}
@@ -30,7 +30,7 @@ const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
     const sanitazedValue = val.target.value.replace(/[^0-9]/g, "");
     form.setFieldValue('cep', sanitazedValue);
     if (sanitazedValue.length === 8) {
-      consultarCep(sanitazedValue).then(result => {
+      consultarCep(sanitazedValue).then((result:any) => {
         if (!!result.data) {
           form.setFieldValue('logradouro', result.data.logradouro)
           form.setFieldValue('bairro', result.data.bairro)
@@ -58,12 +58,12 @@ const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
   }
 
   return <>
-    <form>
+    <form onSubmit={form.onSubmit(onSubmit)}>
       <TextInput label="Descrição" {...form.getInputProps('descricao')}/>
-      <Space h={10}/>
-      <InputWrapper label="CEP" error={form.errors.cep}>
-        <Input component={ReactInputMask} mask={'99999-999'} {...form.getInputProps('cep')} onChange={onChangeCep}/>
-      </InputWrapper>
+        <Space h={10}/>
+        <Input.Wrapper label="CEP" error={form.errors.cep}>
+          <Input component={ReactInputMask} mask={'99999-999'} {...form.getInputProps('cep')} onChange={onChangeCep}/>
+        </Input.Wrapper>
       <Space h={10}/>
       <TextInput label="Logradouro" {...form.getInputProps('logradouro')}/>
       <Space h={10}/>
@@ -77,8 +77,8 @@ const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
       <Space h={10}/>
       <TextInput label="Estado" {...formEstado.getInputProps('nome')} disabled/>
       <Space h={10}/>
-      <Group direction="row">
-        <Button onClick={form.onSubmit(onSubmit)} size="md">Salvar</Button>
+      <Group>
+        <Button type="submit" size="md">Salvar</Button>
         <Button onClick={props.handleCancel} size="md">Cancelar</Button>
       </Group>
     </form>

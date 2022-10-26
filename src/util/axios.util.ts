@@ -7,16 +7,19 @@ const api = axios.create({
   baseURL
 });
 
+const apiWithToken = axios.create({
+  baseURL
+});
 
-export const apiWithToken = (path: string) => {
-  let token = sessionStorage.getItem(jhiAuthenticationToken);
-  let headers = { Authorization: `Bearer ${token}` };
-  let baseUrl = process.env.REACT_APP_BASE_URL || baseURL;
-  return axios.create({
-    baseURL: baseUrl + path,
-    headers
-  });
-};
+apiWithToken.interceptors.request.use(config => {
+  let token:string | null = sessionStorage.getItem(jhiAuthenticationToken);
+  console.log(token);
+  if (token) {
+    config.headers = {...config.headers, ...{"Authorization": `Bearer ${token}`}}
+  }
+  return config;
+});
 
 export default api;
+export {apiWithToken};
 

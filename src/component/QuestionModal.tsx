@@ -17,9 +17,9 @@ const QuestionModal = (props: QuestionModalProps) => {
   const {open, title, question, confirmAction, cancelAction, onClose, confirmText, cancelText} = props;
 
   return <Modal opened={open} title={title} onClose={onClose}>
-    <Group direction={"column"}>
+    <Group>
       <Text>{question}</Text>
-      <Group direction={"row"} p={10}>
+      <Group p={10}>
         <Button onClick={confirmAction} color="green">{confirmText || 'Ok'}</Button>
         <Button onClick={cancelAction} color="red">{cancelText || "Cancel"}</Button>
       </Group>

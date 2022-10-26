@@ -2,7 +2,6 @@ import React from "react";
 import {AgGridReact} from "ag-grid-react";
 import {Group} from "@mantine/core";
 import {GridApi, GridReadyEvent, SelectionChangedEvent} from "ag-grid-community";
-import {useHistory} from "react-router-dom";
 
 interface SearchGridProps {
   title: string;
@@ -18,7 +17,6 @@ const SearchGrid = (props: SearchGridProps) => {
 
   const [gridApi, setGridApi] = React.useState({} as GridApi);
   const { columns, tableData } = props;
-  const history = useHistory();
 
   const onGridReadyHandle = (gridReady: GridReadyEvent) => {
     setGridApi(gridReady.api);

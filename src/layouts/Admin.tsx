@@ -3,6 +3,7 @@ import {ActionIcon, AppShell, Group, Header, Navbar, Text} from "@mantine/core";
 import {Sword} from "tabler-icons-react";
 import menu from "../menu";
 import MenuItem from "../component/MenuItem";
+import {Outlet} from "react-router-dom";
 
 const Admin = (props: any) => {
 
@@ -36,7 +37,7 @@ const Admin = (props: any) => {
       </Navbar>}
       styles={appShellTheme()}
   >
-      {props.children}
+    <Outlet/>
   </AppShell>
 }
 

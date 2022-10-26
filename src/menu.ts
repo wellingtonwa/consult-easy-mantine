@@ -3,12 +3,17 @@ import {Home, User} from "tabler-icons-react";
 const menu = [
   {
     label: "Home",
-    path: "/",
+    path: "/admin/home",
     icon: Home
   },
   {
     label: "Pacientes",
     path: "/admin/paciente",
+    icon: User
+  },
+  {
+    label: "Anamnese",
+    path: "/admin/anamnese",
     icon: User
   },
 ];

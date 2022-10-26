@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Container, Group, Paper, Space, TextInput, Title} from "@mantine/core";
-import {useHistory} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {Pessoa} from "../../model/dto/pessoa";
 import {useForm, yupResolver} from "@mantine/form";
 import {DatePicker} from "@mantine/dates";
@@ -19,8 +19,9 @@ import * as Yup from 'yup';
 type HistoryState = { pessoa: Pessoa };
 
 const PessoaEditView = (props: any) => {
-  const history = useHistory<HistoryState>();
-  const paciente = history.location.state.pessoa || {enderecos: [], contatos: []};
+  const history = useNavigate();
+  const location: any = useLocation();
+  const paciente = location.state.pessoa || {enderecos: [], contatos: []};
   const schema = Yup.object().shape({
     nome: Yup.string().min(2, 'O Nome deve ter no mínimo 2 caracteres.')
   });
@@ -28,7 +29,7 @@ const PessoaEditView = (props: any) => {
 
   const form = useForm<Pessoa>({
     initialValues: paciente,
-    schema: yupResolver(schema),
+    validate: yupResolver(schema),
   });
 
   const handleSubmit = (values: Pessoa) => {
@@ -39,13 +40,13 @@ const PessoaEditView = (props: any) => {
       } else {
         saveUpdatePromisse = savePessoa(values);
       }
-      saveUpdatePromisse.then(result => {
+      saveUpdatePromisse.then((result:any) => {
         showNotification({
           message: 'Paciente salvo com sucesso',
           color: 'blue'
         });
-        history.goBack();
-      }).catch(reason => {
+        history(-1);
+      }).catch((reason:any) => {
         console.log(reason);
       })
     }
@@ -130,7 +131,7 @@ const PessoaEditView = (props: any) => {
         <Space h={15}/>
         <Group>
           <Button leftIcon={<DeviceFloppy/>} color={"green"} type="submit" size="md">Salvar</Button>
-          <Button leftIcon={<X/>} color={"red"} onClick={() => history.goBack()} size="md">Cancelar</Button>
+          <Button leftIcon={<X/>} color={"red"} onClick={() => history(-1)} size="md">Cancelar</Button>
         </Group>
       </form>
     </Paper>
