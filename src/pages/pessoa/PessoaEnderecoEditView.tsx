@@ -9,15 +9,15 @@ import {showNotification} from "@mantine/notifications";
 import * as Yup from 'yup';
 
 const PessoaEnderecoEditView: React.ComponentType<any> = (props: any) => {
-  const schema = Yup.object().  shape({
-    descricao: Yup.string().min(2, 'A descrição deve ter no mínimo 2 caracteres'),
+  const schemaValidation = Yup.object().shape({
+    descricao: Yup.string().required('Informe a Descrição').min(2, 'A descrição deve ter no mínimo 2 caracteres'),
     cep: Yup.string().required("Informe o CEP"),
     numero: Yup.string().required("Informe o Número")
-  })
+  });
 
   const form = useForm<PessoaEndereco>({
     initialValues: props.selectedItem,
-    validate: yupResolver(schema)
+    validate: yupResolver(schemaValidation)
   });
   const formCidade = useForm<Cidade>({
     initialValues: form.values.cidade || {nome: ''}

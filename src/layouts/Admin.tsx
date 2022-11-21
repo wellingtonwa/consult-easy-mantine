@@ -11,7 +11,7 @@ const Admin = (props: any) => {
     return (theme: any) => ({
       main: {backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[1]},
     });
-  }
+  };
 
   const getMenus = () => {
     return menu.map((prop: any, key: any) => {
@@ -22,7 +22,7 @@ const Admin = (props: any) => {
           </MenuItem>
       )
     });
-  }
+  };
 
   return <AppShell
       padding="md"

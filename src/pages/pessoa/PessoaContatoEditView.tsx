@@ -5,34 +5,40 @@ import {PessoaContato} from "../../model/dto/pessoaContato";
 import {TIPO_CONTATO_VALUES, EMAIL} from "../../model/dto/enum/tipoContratoEnum";
 import InputMasked from "../../component/InputMasked";
 import * as Yup from "yup";
+import {TELEFONE} from "../../model/dto/TipoContatoEnum";
 
 const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
 
-  const schemaValidation = Yup.object().  shape({
+  const schemaValidation = Yup.object().shape({
     email: Yup.string().email('Email incorreto').when('tipoContato', { is: 'EMAIL', then: Yup.string().required('Preencha o e-mail') }),
     telefone: Yup.string().matches(/^\(\d{2}\) \d{5}-\d{4}$/, 'Telefone Inválido').when('tipoContato', {is: 'TELEFONE', then: Yup.string().required('Preencha o número de contato')}),
-  })
+  });
 
   const form = useForm<PessoaContato>({
     initialValues: props.selectedItem,
     validate: yupResolver(schemaValidation),
   });
 
-  const vai = () => {
+  const tipoContatoChangeHandler = (data:any) => {
+    form.setValues({tipoContato: data});
+    console.log(form.values.tipoContato);
+  };
+
+  const submeterFormulario = () => {
     if (!form.validate().hasErrors) {
       props.handleSubmit(form.values);
     }
-  }
+  };
 
   return (<>
     <form>
-      <Select label="Tipo Contato" {...form.getInputProps('tipoContato')} data={TIPO_CONTATO_VALUES}/>
+      <Select label="Tipo Contato" {...form.getInputProps('tipoContato')} data={TIPO_CONTATO_VALUES} onChange={tipoContatoChangeHandler}/>
       <Space h={10}/>
-      {props.selectedItem && props.selectedItem.tipoContato === EMAIL.value && <TextInput placeholder="Informe o e-mail" type="email" label="e-mail" {...form.getInputProps('email')}/>}
-      {props.selectedItem && props.selectedItem.tipoContato !== EMAIL.value && <InputMasked field={'telefone'} form={form} mask={'(99) 99999-9999'}/>}
+      {form.values && form.values.tipoContato === EMAIL.value && <TextInput placeholder="Informe o e-mail" type="email" {...form.getInputProps('email')}/>}
+      {form.values && form.values.tipoContato === TELEFONE.value && <InputMasked field={'telefone'} form={form} mask={'(99) 99999-9999'}/>}
       <Space h={10}/>
       <Group>
-        <Button onClick={vai}>Salvar</Button>
+        <Button onClick={submeterFormulario}>Salvar</Button>
         <Button onClick={props.handleCancel}>Cancelar</Button>
       </Group>
     </form>
