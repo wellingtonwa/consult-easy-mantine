@@ -15,12 +15,14 @@ const App = (props: any) => {
 
     return (
         <BrowserRouter>
-            <ModalsProvider>
-                <NotificationsProvider position="top-right">
-                    <RoutesAdmin/>
-                    <RoutesAuth/>
-                </NotificationsProvider>
-            </ModalsProvider>
+            <Provider store={store}>
+                <ModalsProvider>
+                    <NotificationsProvider position="top-right">
+                        <RoutesAdmin/>
+                        <RoutesAuth/>
+                    </NotificationsProvider>
+                </ModalsProvider>
+            </Provider>
         </BrowserRouter>
     );
 };

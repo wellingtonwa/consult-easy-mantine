@@ -10,6 +10,7 @@ import {TELEFONE} from "../../model/dto/TipoContatoEnum";
 const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
 
   const schemaValidation = Yup.object().shape({
+    tipoContato: Yup.string().required('Selecione o tipo de contato'),
     email: Yup.string().email('Email incorreto').when('tipoContato', { is: 'EMAIL', then: Yup.string().required('Preencha o e-mail') }),
     telefone: Yup.string().matches(/^\(\d{2}\) \d{5}-\d{4}$/, 'Telefone Inválido').when('tipoContato', {is: 'TELEFONE', then: Yup.string().required('Preencha o número de contato')}),
   });
@@ -21,7 +22,6 @@ const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
 
   const tipoContatoChangeHandler = (data:any) => {
     form.setValues({tipoContato: data});
-    console.log(form.values.tipoContato);
   };
 
   const submeterFormulario = () => {
@@ -35,7 +35,7 @@ const PessoaContatoEditView: React.ComponentType<any> = (props: any) => {
       <Select label="Tipo Contato" {...form.getInputProps('tipoContato')} data={TIPO_CONTATO_VALUES} onChange={tipoContatoChangeHandler}/>
       <Space h={10}/>
       {form.values && form.values.tipoContato === EMAIL.value && <TextInput placeholder="Informe o e-mail" type="email" {...form.getInputProps('email')}/>}
-      {form.values && form.values.tipoContato === TELEFONE.value && <InputMasked field={'telefone'} form={form} mask={'(99) 99999-9999'}/>}
+      {form.values && form.values.tipoContato === TELEFONE.value && <InputMasked field={'telefone'} form={form} mask={['(99) 9999-9999', '(99) 99999-9999']}/>}
       <Space h={10}/>
       <Group>
         <Button onClick={submeterFormulario}>Salvar</Button>
